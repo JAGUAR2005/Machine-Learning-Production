@@ -2,16 +2,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, LineChart, Line, AreaChart, Area
+  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  AreaChart, Area
 } from 'recharts';
 import { 
-  Activity, Car, Globe, Gauge, Database, CheckCircle, 
-  ChevronRight, TrendingUp, Info, ShieldCheck, Sparkles, Zap
+  Activity, ShieldCheck, Sparkles, Zap
 } from 'lucide-react';
 import './App.css';
-
-const COLORS = ['#6366f1', '#ec4899', '#10b981', '#f59e0b'];
 
 const FALLBACK_REGISTRY: any = {
   india: {
