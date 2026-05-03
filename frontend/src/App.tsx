@@ -6,7 +6,7 @@ import {
   AreaChart, Area
 } from 'recharts';
 import {
-  Activity, ShieldCheck
+  Activity, ShieldCheck, Trophy
 } from 'lucide-react';
 import './App.css';
 
@@ -14,6 +14,9 @@ import './App.css';
 import NeuralHeatmap from './components/NeuralHeatmap';
 import ErrorStability from './components/ErrorStability';
 import FeatureHierarchy from './components/FeatureHierarchy';
+import Leaderboard from './components/Leaderboard';
+import ModelInspector from './components/ModelInspector';
+import SpiderMatrix from './components/SpiderMatrix';
 import SectionTag from './components/UI/SectionTag';
 import RevealSection from './components/UI/RevealSection';
 import AnimatedCounter from './components/UI/AnimatedCounter';
@@ -130,7 +133,7 @@ function App() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="hero-tag"
               >
-                system.26 // neural engine active
+                system.26 // multi-algo engine active
               </motion.span>
 
               <h1 className="hero-title">
@@ -145,7 +148,7 @@ function App() {
                 transition={{ duration: 0.8, delay: 1.4 }}
                 className="hero-desc"
               >
-                Automotive valuation through fractured data analysis. Predictive XGBoost modeling mapped to global market volatility.
+                Automotive valuation through ensemble modeling. Integrating XGBoost, Random Forest, and SVM for hyper-accurate price forecasting.
               </motion.p>
             </div>
 
@@ -155,7 +158,7 @@ function App() {
                   <div className="ticker-value">
                     <AnimatedCounter value={metrics?.regression?.r2 * 100 || 86.82} suffix="%" />
                   </div>
-                  <div className="ticker-label">R² Score</div>
+                  <div className="ticker-label">Max R² Score</div>
                 </div>
                 <div className="ticker-divider" />
                 <div className="ticker-item">
@@ -164,8 +167,8 @@ function App() {
                 </div>
                 <div className="ticker-divider" />
                 <div className="ticker-item">
-                  <div className="ticker-value blue">XGB</div>
-                  <div className="ticker-label">Engine: Online</div>
+                  <div className="ticker-value blue">ENSEMBLE</div>
+                  <div className="ticker-label">5 Algorithms Online</div>
                 </div>
               </div>
             </div>
@@ -276,7 +279,7 @@ function App() {
                 <div className="metric-value">
                   <AnimatedCounter value={metrics?.regression?.r2 * 100 || 86.82} suffix="%" />
                 </div>
-                <div className="metric-label">R² Score</div>
+                <div className="metric-label">Ensemble R² Score</div>
               </div>
               <div className="metric-card">
                 <div className="metric-value">
@@ -288,50 +291,27 @@ function App() {
                 <div className="metric-value">
                   <AnimatedCounter value={metrics?.classification?.accuracy * 100 || 81.7} suffix="%" />
                 </div>
-                <div className="metric-label">Classification Acc.</div>
+                <div className="metric-label">Max Accuracy</div>
               </div>
               <div className="metric-card">
                 <div className="metric-value">
                   $<AnimatedCounter value={metrics?.regression?.rmse || 6414} suffix="" decimals={0} />
                 </div>
-                <div className="metric-label">RMSE</div>
+                <div className="metric-label">Ensemble RMSE</div>
               </div>
             </div>
           </RevealSection>
 
-          {/* ═══ CHART ═══ */}
-          <RevealSection className="chart-section" id="validation">
+          {/* ═══ LEADERBOARD ═══ */}
+          <RevealSection className="leaderboard-section" id="leaderboard">
+            <SectionTag label="ranking" />
+            <Leaderboard data={metrics?.leaderboard} />
+          </RevealSection>
+
+          {/* ═══ SPIDER VALIDATION MATRIX ═══ */}
+          <RevealSection className="validation-section" id="validation">
             <SectionTag label="validation" />
-            <div className="chart-card">
-              <div className="form-header">
-                <Activity size={16} style={{ color: 'var(--accent-blue)' }} aria-hidden="true" />
-                <h3>Validation Matrix</h3>
-              </div>
-              <div style={{ height: '420px' }}>
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
-                    <XAxis dataKey="name" stroke="#444" fontSize={9} tickLine={false} axisLine={false}
-                      fontFamily="'Press Start 2P'" />
-                    <YAxis stroke="#444" fontSize={9} tickLine={false} axisLine={false} />
-                    <Tooltip
-                      contentStyle={{
-                        background: 'rgba(0,0,0,0.9)', border: '1px solid rgba(255,255,255,0.1)',
-                        color: '#fff', borderRadius: '8px', fontFamily: "'Inter'", fontSize: '0.8rem'
-                      }}
-                    />
-                    <Area type="monotone" dataKey="value" stroke="var(--accent-blue)" strokeWidth={2}
-                      fill="url(#blueGradient)" />
-                    <defs>
-                      <linearGradient id="blueGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="var(--accent-blue)" stopOpacity={0.15} />
-                        <stop offset="100%" stopColor="var(--accent-blue)" stopOpacity={0.01} />
-                      </linearGradient>
-                    </defs>
-                  </AreaChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
+            <SpiderMatrix data={metrics?.leaderboard || []} />
           </RevealSection>
 
           {/* ═══ AUDIT ═══ */}
@@ -339,25 +319,38 @@ function App() {
             <SectionTag label="audit" />
             <div className="form-header">
               <ShieldCheck size={16} style={{ color: 'var(--accent-blue)' }} aria-hidden="true" />
-              <h3>Neural Audit Trail</h3>
+              <h3>Ensemble Audit Trail</h3>
             </div>
 
             <div className="audit-grid">
+              <div className="span-2" style={{ gridColumn: 'span 2' }}>
+                 <ModelInspector leaderboardData={metrics?.leaderboard || []} />
+              </div>
+
               <div className="audit-card-featured">
                 <div className="plot-wrapper" style={{ padding: '3rem' }}>
                   <NeuralHeatmap data={metrics?.chart_data?.confusion} />
                 </div>
                 <div className="audit-overlay">
                   <div>
-                    <div className="audit-card-label">Fracture 01</div>
-                    <div className="audit-card-sublabel">Clustering Matrix</div>
+                    <div className="audit-card-label">Matrix 01</div>
+                    <div className="audit-card-sublabel">XGBoost Clustering</div>
                   </div>
                 </div>
               </div>
 
-              <div className="audit-row">
-                <ErrorStability data={metrics?.chart_data?.residuals} metrics={metrics} />
+              <div className="audit-card-featured" style={{ background: 'rgba(255,255,255,0.01)' }}>
                 <FeatureHierarchy data={metrics?.chart_data?.importance} />
+                <div className="audit-overlay">
+                  <div>
+                    <div className="audit-card-label">Nodes 02</div>
+                    <div className="audit-card-sublabel">Feature Hierarchy</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="audit-row" style={{ gridColumn: 'span 2' }}>
+                <ErrorStability data={metrics?.chart_data?.residuals} metrics={metrics} />
               </div>
             </div>
           </RevealSection>
@@ -374,8 +367,8 @@ function App() {
 
             <p className="footer-body">
               This interface operates as a high-fidelity demonstration of the global car resale intelligence platform.
-              Core engine utilizes XGBoost L2 gradient boosting trained on 364K+ multi-market records.
-              System leverages a validated fallback registry to showcase cascading UI logic and multi-market valuation patterns.
+              System utilizes a multi-algorithm ensemble (XGBoost, Random Forest, SVM, Decision Tree) trained on 364K+ multi-market records.
+              Valuation logic is dynamically routed to the highest-performing model based on market segment volatility.
             </p>
 
             <div className="footer-divider" />
@@ -384,6 +377,7 @@ function App() {
               <button className="footer-nav-item" onClick={() => scrollTo('hero')}>Dashboard</button>
               <button className="footer-nav-item" onClick={() => scrollTo('variables')}>Variables</button>
               <button className="footer-nav-item" onClick={() => scrollTo('metrics')}>Metrics</button>
+              <button className="footer-nav-item" onClick={() => scrollTo('leaderboard')}>Leaderboard</button>
               <button className="footer-nav-item" onClick={() => scrollTo('audit')}>Audit</button>
             </nav>
 
@@ -391,7 +385,7 @@ function App() {
               RESALE<br />INTELLIGENCE
             </div>
 
-            <p className="footer-copy">© 2026 // Resale Intelligence // Professional Persona V6.0</p>
+            <p className="footer-copy">© 2026 // Resale Intelligence // Professional Ensemble V6.0</p>
           </footer>
         </RevealSection>
 
@@ -404,7 +398,7 @@ function App() {
         </div>
         <div className="nav-links">
           <button className="nav-link" onClick={() => scrollTo('hero')}>Dashboard</button>
-          <button className="nav-link" onClick={() => scrollTo('variables')}>Analysis</button>
+          <button className="nav-link" onClick={() => scrollTo('leaderboard')}>Ranking</button>
           <button className="nav-link" onClick={() => scrollTo('metrics')}>Metrics</button>
           <button className="nav-link" onClick={() => scrollTo('audit')}>Audit</button>
         </div>

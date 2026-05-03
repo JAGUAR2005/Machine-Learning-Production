@@ -1,0 +1,7 @@
+{
+  "algorithm": "Logistic/Linear Regression",
+  "r2": 0.7519441050659843,
+  "mae": 5002.15161026083,
+  "accuracy": 0.7369812169609717,
+  "timestamp": "2026-05-02T17:18:37.287608"
+}

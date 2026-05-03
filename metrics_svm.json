@@ -1,0 +1,7 @@
+{
+  "algorithm": "Support Vector Machine (Linear)",
+  "r2": 0.7405882533346506,
+  "mae": 5498.979388338488,
+  "accuracy": 0.684146890113598,
+  "timestamp": "2026-05-02T17:25:13.851644"
+}
