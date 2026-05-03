@@ -19,6 +19,8 @@ The system identifies the optimal model for specific tasks based on audited metr
 | 🏆 1 | **Random Forest** | Price Prediction | **0.8713** | 81.1% |
 | 🥈 2 | **XGBoost** | Market Segmenting | 0.8664 | **81.6%** |
 | 🥉 3 | **Decision Tree** | Interpretability | 0.8553 | 79.2% |
+| 🏅 4 | **Logistic Regression**| Baseline Accuracy | 0.7519 | 73.7% |
+| 🏅 5 | **SVM (Linear)** | Vector Stability | 0.7406 | 68.4% |
 
 ## 🛠️ Tech Stack
 
